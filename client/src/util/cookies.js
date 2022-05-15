@@ -27,9 +27,7 @@ export const setCookie = (cookieName, value = "", days) => {
 };
 
 export const deleteCookie = (cookieName) => {
-  const date = new Date();
-  date.setTime(date.getTime() - 2000);
-  document.cookie = `${cookieName}=""; expires=${date.toUTCString()}`;
+  document.cookie = `${cookieName}=""; Max-age=-1`;
 };
 
 export const nukeAllCookies = () => {

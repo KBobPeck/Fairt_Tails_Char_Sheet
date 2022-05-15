@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const CharSchema = new mongoose.Schema({
   background: {
     name: { type: String },
+    level: { type: Number },
+    species: { type: String },
     childhood: { type: String },
     adolescence: { type: String },
     adulthood: { type: String },

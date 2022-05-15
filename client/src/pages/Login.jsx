@@ -1,53 +1,63 @@
-import axios from "axios";
 import React, { useState } from "react";
-import { baseURL } from "util/baseURL";
-import { setCookie } from "util/cookies";
+import { useSelector } from "react-redux";
+import {
+  loginUser,
+  selectErr,
+  selectLoading,
+  setErr,
+  signupUser,
+} from "redux/reducers/authReducer";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
   const [userInfo, setUserInfo] = useState({
     email: "",
     password: "",
+    username: "",
     verify: "",
   });
-  const [error, setError] = useState("");
   const [login, setLogin] = useState(true);
+
+  const dispatch = useDispatch();
+  const error = useSelector(selectErr);
+  const loading = useSelector(selectLoading);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (login) return dispatch(loginUser(userInfo));
+
+    if (userInfo.password !== userInfo.verify) {
+      return dispatch(setErr(`Passwords don't match`));
+    }
+
+    dispatch(signupUser(userInfo));
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setUserInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    try {
-      if (login) {
-        const res = await axios.post(`${baseURL}/api/auth/login`, {
-          ...userInfo,
-        });
-        if (res.data.err) return setError(res.data.msg);
-        setCookie("token", res.data.token);
-        
-      }
-      if (!login) {
-        if (userInfo.password !== userInfo.verify) {
-          setUserInfo((prev) => ({ ...prev, password: "", verify: "" }));
-          return setError("Passwords don't match");
-        }
-      }
-    } catch (error) {
-      console.log(
-        `%cerror with submit`,
-        "background-color:black; color: white; border: 2px red solid"
-      );
-    }
-  };
+  if (loading) return <h1>LOADING...</h1>;
 
   return (
     <div>
       <h1>{login ? "login" : "Signup"}</h1>
       {error && <h3>{error}</h3>}
       <form onSubmit={handleSubmit}>
+        {!login && (
+          <label htmlFor="username">
+            username :{" "}
+            <input
+              type="text"
+              placeholder="username"
+              name="username"
+              value={userInfo.username}
+              onChange={handleChange}
+            />
+          </label>
+        )}
+        <br />
         <label htmlFor="email">
           Email:{" "}
           <input
@@ -86,7 +96,7 @@ const Login = () => {
         <button type="submit">{login ? "Login" : "Sign Up"}</button>
       </form>
       <button onClick={() => setLogin(!login)}>
-        {login ? "need to sing up ?" : "already signed up?"}
+        {login ? "need to sign up ?" : "already signed up?"}
       </button>
     </div>
   );

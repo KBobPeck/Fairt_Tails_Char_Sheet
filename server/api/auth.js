@@ -3,12 +3,28 @@ const router = express.Router();
 const UserModel = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const emailRegex =
+  /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g;
+
+const findUser = async (req, res) => {
+  const { token } = req.body;
+  const { userId } = jwt.verify(token, process.env.JWT_SECRET);
+
+  const user = await UserModel.findById(userId);
+  res.json({ userId, username: user.username });
+};
 
 const userSignup = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
 
   try {
-    if (password.legnth < 6)
+    if (!email.match(emailRegex))
+      return res.json({
+        status: 406,
+        err: "Not Acceptable",
+        msg: "Must be a valid email",
+      });
+    if (password.length < 6)
       return res.json({
         status: 406,
         err: "Not Acceptable",
@@ -23,7 +39,7 @@ const userSignup = async (req, res) => {
         msg: "That email is already taken",
       });
 
-    user = new UserModel({ email, password });
+    user = new UserModel({ email, password, username, charList: [] });
     user.password = await bcrypt.hash(user.password, 10);
 
     await user.save();
@@ -36,7 +52,7 @@ const userSignup = async (req, res) => {
       { expiresIn: "1d" },
       (err, token) => {
         if (err) throw err;
-        else res.json({ userId: user._id, token });
+        else res.json({ userId: user._id, token, username: user.username });
       }
     );
   } catch (error) {
@@ -53,10 +69,10 @@ const userLogin = async (req, res) => {
       return res.json({
         status: 406,
         err: "Not Acceptable",
-        msg: "No use with that email exists",
+        msg: "No user with that email exists",
       });
 
-    const isPass = bcrypt.compare(password, user.password);
+    const isPass = await bcrypt.compare(password, user.password);
 
     if (!isPass)
       return res.json({
@@ -73,7 +89,7 @@ const userLogin = async (req, res) => {
       { expiresIn: "1d" },
       (err, token) => {
         if (err) throw err;
-        return res.json({ userId: user._id, token });
+        return res.json({ userId: user._id, token, username: user.username });
       }
     );
   } catch (error) {
@@ -83,5 +99,6 @@ const userLogin = async (req, res) => {
 
 router.route("/signup").post(userSignup);
 router.route("/login").post(userLogin);
+router.route("/findUser").post(findUser);
 
 module.exports = router;

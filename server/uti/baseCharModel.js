@@ -1,0 +1,231 @@
+const charBase = {
+  background: {
+    name: "",
+    level: 0,
+    species: "",
+    childhood: "",
+    adolescence: "",
+    adulthood: "",
+    avatar: "",
+    description: "",
+  },
+  life: {
+    health: {
+      max: 0,
+      current: 0,
+    },
+    sanity: {
+      max: 0,
+      current: 0,
+    },
+    mana: {
+      max: 0,
+      current: 0,
+    },
+  },
+  stats: {
+    power: {
+      body: 0,
+      mind: 0,
+      soul: 0,
+    },
+    resilience: {
+      body: 0,
+      mind: 0,
+      soul: 0,
+    },
+  },
+  otherStats: {
+    initialBonus: 0,
+    tacticalSpeed: 0,
+    corruption: 0,
+    prestige: 0,
+    damageReduction: 0,
+    heroPoints: 0,
+    advancementsEarned: 0,
+    advancementsUnspent: 0,
+  },
+  skills: {
+    combat: {
+      melee: {
+        attribute: "power",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      ranged: {
+        attribute: "power",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      spellcasting: {
+        attribute: "power",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      defend: {
+        attribute: "resilience",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    instinct: {
+      athletics: {
+        attribute: "body",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      notice: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      survival: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    social: {
+      insight: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      intimidation: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      leadership: {
+        attribute: "soul",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      persuasion: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      performance: {
+        attribute: "soul",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    profession: {
+      driving: {
+        attribute: "body",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      piloting: {
+        attribute: "body",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      trading: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    analysis: {
+      investigation: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      lore: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    recovery: {
+      healing: {
+        attribute: "mind",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      restoration: {
+        attribute: "Soul",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+    skulduggery: {
+      stealth: {
+        attribute: "body",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+      thievery: {
+        attribute: "soul",
+        trained: false,
+        proficient: false,
+        export: false,
+        master: false,
+      },
+    },
+  },
+  equipment: {
+    weapons: [],
+    armor: [],
+    bag: [],
+    money: {
+      gold: 0,
+      silver: 0,
+      copper: 0,
+    },
+  },
+  charInfo: {
+    injuries: [],
+    perks: [],
+    flaws: [],
+    advancementLog: [],
+    spells: [],
+    languages: [],
+  },
+};
+
+module.exports = charBase;

@@ -89,7 +89,6 @@ export const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(getUserId.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.authToken = getCookie("token");
         state.username = action.payload.username;
         state.userId = action.payload.userId;

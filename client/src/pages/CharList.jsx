@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { Link } from "react-router-dom";
-import { selectUser, setErr } from "redux/reducers/authReducer";
+import { selectUser } from "redux/reducers/authReducer";
 import {
   createChar,
   getCharList,
   selectChars,
   selectLoading,
+  deleteChar,
 } from "redux/reducers/charReducer";
 
 const CharList = () => {
@@ -27,6 +28,7 @@ const CharList = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getCharList(username));
+    // eslint-disable-next-line
   }, []);
 
   const handleChange = (e) => {
@@ -39,7 +41,11 @@ const CharList = () => {
     if (!charInfo.name || !charInfo.species)
       return setErr("please fill out name and species");
     dispatch(createChar({ charInfo, userId }));
-    return <Navigate to="/char/1" />;
+    setShowModal(false);
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteChar({ id, userId }));
   };
 
   if (loading) return <h1>LOADING...</h1>;
@@ -104,10 +110,13 @@ const CharList = () => {
         chars.map((each, i) => {
           const { background } = each;
           return (
-            <Link key={i} to={`/char/${each._id}`}>
-              <h3>{background.name}</h3>
+            <div key={i}>
+              <h3>
+                <Link to={`/char/${each._id}`}>{background.name}</Link>
+              </h3>
               <h5>{background.level + " " + background.species}</h5>
-            </Link>
+              <button onClick={() => handleDelete(each._id)}>delete</button>
+            </div>
           );
         })}
     </div>

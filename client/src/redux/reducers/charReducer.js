@@ -5,6 +5,7 @@ import { baseURL } from "util/baseURL";
 const initialState = {
   chars: [],
   loading: false,
+  char: {},
 };
 
 export const getCharList = createAsyncThunk(
@@ -25,17 +26,38 @@ export const createChar = createAsyncThunk(
   }
 );
 
+export const deleteChar = createAsyncThunk(
+  "charReducer/deleteChar",
+  async (payload) => {
+    const res = await axios.post(`${baseURL}/char/deletechar`, payload);
+
+    return res.data;
+  }
+);
+
+export const getChar = createAsyncThunk(
+  "charReducer/getChar",
+  async (payload) => {
+    const res = await axios.get(`${baseURL}/char/getChar/${payload}`);
+
+    return res.data;
+  }
+);
+
 export const charSlice = createSlice({
   name: "charReducer",
   initialState,
-  reducers: {},
+  reducers: {
+    // getChar: (state, action) => {
+    //   state.char = state.chars.find((each) => each._id === action.payload);
+    // },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCharList.pending, (state) => {
         state.loading = true;
       })
       .addCase(getCharList.fulfilled, (state, action) => {
-        // console.log(action.payload);
         state.chars = action.payload.chars;
         state.loading = false;
       })
@@ -48,11 +70,40 @@ export const charSlice = createSlice({
         state.loading = true;
       })
       .addCase(createChar.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.chars.push(action.payload.char);
         state.loading = false;
       })
       .addCase(createChar.rejected, (state) => {
+        console.log("error with create char");
+        state.loading = false;
+      });
+    builder
+      .addCase(deleteChar.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteChar.fulfilled, (state, action) => {
+        state.chars = state.chars.filter((each) => {
+          return each._id !== action.payload.id;
+        });
+        state.loading = false;
+      })
+      .addCase(deleteChar.rejected, (state) => {
+        console.log("error with create char");
+        state.loading = false;
+      });
+    builder
+      .addCase(getChar.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getChar.fulfilled, (state, action) => {
+        // if (action.payload.err) {
+        //   state.char = {};
+        //   return;
+        // }
+        state.char = action.payload;
+        state.loading = false;
+      })
+      .addCase(getChar.rejected, (state) => {
         console.log("error with create char");
         state.loading = false;
       });
@@ -61,7 +112,8 @@ export const charSlice = createSlice({
 
 export const selectChars = (state) => state.charReducer.chars;
 export const selectLoading = (state) => state.charReducer.loading;
+export const selectChar = (state) => state.charReducer.char;
 
-// export const {} = charListSlice.actions;
+// export const { getChar } = charSlice.actions;
 
 export default charSlice.reducer;

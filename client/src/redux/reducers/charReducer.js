@@ -96,10 +96,6 @@ export const charSlice = createSlice({
         state.loading = true;
       })
       .addCase(getChar.fulfilled, (state, action) => {
-        // if (action.payload.err) {
-        //   state.char = {};
-        //   return;
-        // }
         state.char = action.payload;
         state.loading = false;
       })

@@ -43,6 +43,7 @@ const deleteChar = async (req, res) => {
 const getChar = async (req, res) => {
   const { id } = req.params;
   const char = await CharModel.findById(id);
+  console.log(id, char);
 
   if (!char)
     return res.json({ err: "404", msg: "There is no character with that ID" });

@@ -19,18 +19,18 @@ function App() {
   const username = useSelector(selectUsername);
 
   const { token } = getCookies();
+  console.log(token);
   if (token && !auth) dispatch(getUserId({ token }));
 
-  const unprotectedRoutes = ["/"];
-
-  if (auth && unprotectedRoutes.includes(location.pathname))
+  if (auth && location.pathname === "/") {
     return <Navigate to={`/charlist/${username}`} />;
+  }
 
   return (
     <div className="App">
       <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={auth ? <Navigate to={"/"} /> : <Login />} />
         <Route
           path="/char/:id"
           element={auth ? <Char /> : <Navigate to={"/"} />}

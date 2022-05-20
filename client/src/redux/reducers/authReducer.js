@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { baseURL } from "util/baseURL";
-import { getCookie, setCookie } from "util/cookies";
+import { deleteCookie, getCookie, setCookie } from "util/cookies";
+import { deleteChar } from "./charReducer";
 
 const initialState = {
   authToken: "",
@@ -42,6 +43,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
+      deleteCookie("token");
       state.authToken = "";
       state.userId = "";
     },
@@ -61,7 +63,7 @@ export const authSlice = createSlice({
           state.loading = false;
           return;
         }
-        setCookie("token", data.token);
+        setCookie("token", data.token, 1);
         state.authToken = data.token;
         state.username = data.username;
         state.userId = data.userId;
@@ -78,7 +80,7 @@ export const authSlice = createSlice({
           state.loading = false;
           return;
         }
-        setCookie("token", data.token);
+        setCookie("token", data.token, 1);
         state.authToken = data.token;
         state.username = data.username;
         state.userId = data.userId;

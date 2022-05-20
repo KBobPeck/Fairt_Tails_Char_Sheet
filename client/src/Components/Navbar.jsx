@@ -11,7 +11,6 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    deleteCookie("token");
     return <Navigate to="/" />;
   };
 

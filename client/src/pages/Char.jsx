@@ -12,11 +12,10 @@ const Char = () => {
   const dispatch = useDispatch();
   const char = useSelector(selectChar);
   const tabs = ["info", "equipment", "stats", "skills"];
-  // const [err, setErr] = useState(false);
   const [tab, setTab] = useState("info");
 
   useEffect(() => {
-    if (char !== {}) dispatch(getChar(id));
+    dispatch(getChar(id));
     //eslint-disable-next-line
   }, []);
 
